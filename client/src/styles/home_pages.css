@@ -1,0 +1,34 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-hp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.list_individuelle {
+  margin: 1rem;
+}
+
+.header-hp > h1 {
+  color: black;
+  font-size: 5rem;
+}
+
+.list_individuelle > h2 {
+  color: black;
+}
+a {
+  text-decoration: none;
+}

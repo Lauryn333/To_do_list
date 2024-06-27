@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./App";
 import HomePage from "./pages/HomePage";
+import ItemsPage from "./pages/ItemsPage";
 
 const listsLoader = async () => {
   const response = await fetch(`http://localhost:3310/api/lists`);
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
         loader: listsLoader,
+      },
+      {
+        path: "/ItemsPage",
+        element: <ItemsPage />,
       },
     ],
   },
