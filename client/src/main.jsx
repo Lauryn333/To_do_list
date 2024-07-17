@@ -13,6 +13,12 @@ const listsLoader = async () => {
   return data;
 };
 
+const itemsLoader = async () => {
+  const response = await fetch(`http://localhost:3310/api/items`);
+  const data = await response.json();
+  return data;
+};
+
 const router = createBrowserRouter([
   {
     element: <App />,
@@ -23,8 +29,9 @@ const router = createBrowserRouter([
         loader: listsLoader,
       },
       {
-        path: "/ItemsPage",
+        path: "/ItemsPage/:listId",
         element: <ItemsPage />,
+        loader: itemsLoader,
       },
     ],
   },
