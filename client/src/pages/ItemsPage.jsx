@@ -9,7 +9,7 @@ function ItemsPage() {
 
   const [prep, setPrep] = useState("");
 
-  const [newItem, setNewItem] = useState("");
+  // const [newItem, setNewItem] = useState("");
 
   useEffect(() => {
     const itemsData = items.filter(
@@ -20,9 +20,9 @@ function ItemsPage() {
     }
   }, [listId, items]);
 
-  const handleInputChange = (e) => {
-    setNewItem(e.target.value);
-  };
+  // const handleInputChange = (e) => {
+  //   setNewItem(e.target.value);
+  // };
   // const handleAddItem = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -35,15 +35,17 @@ function ItemsPage() {
 
   return (
     <>
-      <p>{prep[0]?.todo}</p>
-      <p>{newItem}</p>
-      <input
-        className="add_item"
-        type="text"
-        placeholder="Ajoute une tâche"
-        onChange={handleInputChange}
-      />
-      {/* <button onClick={handleAddItem}>Créer</button> */}
+      {prep.map((item) => (
+        <p key={item.id}>{item.todo}</p>
+      ))}
+
+      {/* <input
+          className="add_item"
+          type="text"
+          placeholder="Ajoute une tâche"
+          onChange={handleInputChange}
+        />
+        <button onClick={handleAddItem}>Créer</button> */}
     </>
   );
 }
