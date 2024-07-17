@@ -7,7 +7,7 @@ function ItemsPage() {
 
   const { listId } = useParams();
 
-  const [prep, setPrep] = useState("");
+  const [prep, setPrep] = useState([]);
 
   // const [newItem, setNewItem] = useState("");
 
