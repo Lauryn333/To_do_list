@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         loader: listsLoader,
       },
       {
-        path: "/ItemsPage/:id",
+        path: "/ItemsPage/:listId",
         element: <ItemsPage />,
         loader: itemsLoader,
       },
