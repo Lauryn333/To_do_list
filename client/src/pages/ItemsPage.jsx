@@ -9,7 +9,7 @@ function ItemsPage() {
 
   const [prep, setPrep] = useState([]);
 
-  // const [newItem, setNewItem] = useState("");
+  const [newItem, setNewItem] = useState("");
 
   useEffect(() => {
     const itemsData = items.filter(
@@ -20,35 +20,54 @@ function ItemsPage() {
     }
   }, [listId, items]);
 
-  // const handleInputChange = (e) => {
-  //   setNewItem(e.target.value);
-  // };
-  // const handleAddItem = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const sendNewItem = await axios.post(
-  //       `${import.meta.env.VITE_API_URL}/api/items/${listId}`
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
+  const handleInputChange = (event) => {
+    setNewItem(event.target.value);
+  };
 
+  const handleAddItem = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/items/${listId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            todo: newItem,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.info("Item added successfully:", data);
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
+  };
   return (
     <>
-      {prep.map((item) => (
-        <p key={item.id}>{item.todo}</p>
+      {prep?.map((item) => (
+        <p key={item?.id}>{item?.todo}</p>
       ))}
 
-      {/* <input
-          className="add_item"
-          type="text"
-          placeholder="Ajoute une tâche"
-          onChange={handleInputChange}
-        />
-        <button onClick={handleAddItem}>Créer</button> */}
+      <input
+        className="add_item"
+        type="text"
+        name="item"
+        placeholder="Ajoute une tâche"
+        onChange={handleInputChange}
+      />
+      <button type="button" onClick={handleAddItem}>
+        Créer
+      </button>
     </>
   );
 }
-// }
 
 export default ItemsPage;
