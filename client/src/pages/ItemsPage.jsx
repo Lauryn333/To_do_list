@@ -26,6 +26,7 @@ function ItemsPage() {
 
   const handleAddItem = async (event) => {
     event.preventDefault();
+
     try {
       const response = await fetch(
         `http://localhost:3310/api/items/${listId}`,
@@ -44,8 +45,10 @@ function ItemsPage() {
         throw new Error("Network response was not ok");
       }
 
-      const data = await response.json();
-      console.info("Item added successfully:", data);
+      const newItemAdd = await response.json();
+      setPrep((prepAddNewItem) => [...prepAddNewItem, newItemAdd]);
+      setNewItem("");
+      console.info("Item added successfully:", newItemAdd);
     } catch (error) {
       console.error("Error adding item:", error);
     }
@@ -53,7 +56,10 @@ function ItemsPage() {
   return (
     <>
       {prep?.map((item) => (
-        <p key={item?.id}>{item?.todo}</p>
+        <>
+          <p key={item?.id}>{item?.todo}</p>
+          <button type="button">Supprimer</button>
+        </>
       ))}
 
       <input
@@ -61,6 +67,7 @@ function ItemsPage() {
         type="text"
         name="item"
         placeholder="Ajoute une tâche"
+        value={newItem}
         onChange={handleInputChange}
       />
       <button type="button" onClick={handleAddItem}>

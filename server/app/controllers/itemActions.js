@@ -35,10 +35,24 @@ const add = async (req, res, next) => {
   }
 };
 
+const destroy = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const response = await tables.item.destroy(id);
+    if (response) {
+      res.json({ message: "Item deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Item not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   browse,
   read,
   // edit,
   add,
-  // destroy,
+  destroy,
 };

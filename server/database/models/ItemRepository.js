@@ -26,6 +26,14 @@ class ItemRepository extends AbstractRepository {
     const [rows] = await this.database.query(`select * from ${this.table}`);
     return rows;
   }
+
+  async destroy(id) {
+    const query = `
+      DELETE FROM ${this.table} WHERE id = ?
+    `;
+    const [result] = await this.database.query(query, [id]);
+    return result.affectedRows > 0;
+  }
 }
 
 module.exports = ItemRepository;
