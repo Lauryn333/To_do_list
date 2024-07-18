@@ -7,7 +7,7 @@ const router = express.Router();
 /* ************************************************************************* */
 
 // Import item-related actions
-const { browse, read, add } = require("../../controllers/itemActions");
+const { browse, read, add, destroy } = require("../../controllers/itemActions");
 
 // Route to get a list of items
 router.get("/", browse);
@@ -16,7 +16,9 @@ router.get("/", browse);
 router.get("/:id", read);
 
 // Route to add a new item
-router.post("/", add);
+router.post("/:listId", add);
+
+router.delete("/:id", destroy);
 
 /* ************************************************************************* */
 

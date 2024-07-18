@@ -7,7 +7,9 @@ function ItemsPage() {
 
   const { listId } = useParams();
 
-  const [prep, setPrep] = useState("");
+  const [prep, setPrep] = useState([]);
+
+  const [newItem, setNewItem] = useState("");
 
   useEffect(() => {
     const itemsData = items.filter(
@@ -18,7 +20,61 @@ function ItemsPage() {
     }
   }, [listId, items]);
 
-  return <p>{prep[0]?.todo}</p>;
+  const handleInputChange = (event) => {
+    setNewItem(event.target.value);
+  };
+
+  const handleAddItem = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/items/${listId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            todo: newItem,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const newItemAdd = await response.json();
+      setPrep((prepAddNewItem) => [...prepAddNewItem, newItemAdd]);
+      setNewItem("");
+      console.info("Item added successfully:", newItemAdd);
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
+  };
+  return (
+    <>
+      {prep?.map((item) => (
+        <>
+          <p key={item?.id}>{item?.todo}</p>
+          <button type="button">Supprimer</button>
+        </>
+      ))}
+
+      <input
+        className="add_item"
+        type="text"
+        name="item"
+        placeholder="Ajoute une tâche"
+        value={newItem}
+        onChange={handleInputChange}
+      />
+      <button type="button" onClick={handleAddItem}>
+        Créer
+      </button>
+    </>
+  );
 }
 
 export default ItemsPage;
