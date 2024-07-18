@@ -11,6 +11,8 @@ function ItemsPage() {
 
   const [newItem, setNewItem] = useState("");
 
+  const [ItemChecked, setItemChecked] = useState([]);
+
   useEffect(() => {
     const itemsData = items.filter(
       (item) => item.list_id === parseInt(listId, 10)
@@ -53,13 +55,31 @@ function ItemsPage() {
       console.error("Error adding item:", error);
     }
   };
+
+  const handleChangeCheckBox = (e, index) => {
+    // console.log(e.target.value);
+    const activeItem = document.getElementById(index).checked;
+    // console.log("Item coché: ", activeItem);
+    if (activeItem === true) {
+      setItemChecked((oldItems) => [...oldItems, e.target.value]);
+    } else {
+      setItemChecked(ItemChecked.filter((values) => values !== e.target.value));
+    }
+  };
+
   return (
     <>
-      {prep?.map((item) => (
-        <>
-          <p key={item?.id}>{item?.todo}</p>
+      {prep?.map((item, index) => (
+        <div key={item?.id} className="div-item">
+          <input
+            id={index}
+            type="checkbox"
+            value={item.todo}
+            onChange={(e) => handleChangeCheckBox(e, index)}
+          />
+          <p>{item?.todo}</p>
           <button type="button">Supprimer</button>
-        </>
+        </div>
       ))}
 
       <input
