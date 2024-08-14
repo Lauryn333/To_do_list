@@ -13,6 +13,9 @@ function ItemsPage() {
 
   const [ItemChecked, setItemChecked] = useState([]);
 
+  // Pour récupérer l'id de l'item que l'on souhaite delete
+  const [itemIdtoDelete, setItemtoDelete] = useState("");
+
   useEffect(() => {
     const itemsData = items.filter(
       (item) => item.list_id === parseInt(listId, 10)
@@ -56,6 +59,29 @@ function ItemsPage() {
     }
   };
 
+  const handleDeleteItem = async () => {
+    // Transmet l'id de l'item qu'on souhaite delete à l'URL
+    console.info(itemIdtoDelete);
+    try {
+      const response = await fetch(
+        `http://localhost:3310/api/items/${itemIdtoDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      console.info("Item successfully deleted");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
   const handleChangeCheckBox = (e, index) => {
     // console.log(e.target.value);
     const activeItem = document.getElementById(index).checked;
@@ -78,7 +104,15 @@ function ItemsPage() {
             onChange={(e) => handleChangeCheckBox(e, index)}
           />
           <p>{item?.todo}</p>
-          <button type="button">Supprimer</button>
+          <button
+            type="button"
+            onClick={() => {
+              setItemtoDelete(item.id);
+              handleDeleteItem();
+            }}
+          >
+            Supprimer
+          </button>
         </div>
       ))}
 

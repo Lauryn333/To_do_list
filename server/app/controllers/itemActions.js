@@ -36,9 +36,9 @@ const add = async (req, res, next) => {
 };
 
 const destroy = async (req, res, next) => {
-  const { id } = req.params;
+  const { itemId } = req.params;
   try {
-    const response = await tables.item.destroy(id);
+    const response = await tables.item.destroy(itemId);
     if (response) {
       res.json({ message: "Item deleted successfully" });
     } else {

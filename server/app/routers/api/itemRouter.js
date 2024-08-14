@@ -18,7 +18,7 @@ router.get("/:id", read);
 // Route to add a new item
 router.post("/:listId", add);
 
-router.delete("/:id", destroy);
+router.delete("/:itemId", destroy);
 
 /* ************************************************************************* */
 

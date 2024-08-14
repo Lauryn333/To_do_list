@@ -27,11 +27,11 @@ class ItemRepository extends AbstractRepository {
     return rows;
   }
 
-  async destroy(id) {
+  async destroy(itemId) {
     const query = `
       DELETE FROM ${this.table} WHERE id = ?
     `;
-    const [result] = await this.database.query(query, [id]);
+    const [result] = await this.database.query(query, [itemId]);
     return result.affectedRows > 0;
   }
 }
