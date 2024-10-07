@@ -11,14 +11,10 @@ function ItemsPage() {
 
   const [prep, setPrep] = useState([]);
 
-  // useEffect(() => {
-  //   console.log("État actuel de prep:", prep); // Vérifier le rendu
-  // }, [prep]);
-
   const [newItem, setNewItem] = useState("");
   const [itemEdited, setItemEdited] = useState("");
 
-  const [ItemChecked, setItemChecked] = useState([]);
+  const [ItemChecked, setItemChecked] = useState("");
 
   useEffect(() => {
     const itemsData = items.filter(
@@ -38,8 +34,6 @@ function ItemsPage() {
   };
 
   const handleAddItem = async () => {
-    // event.preventDefault();
-
     try {
       const response = await fetch(
         `http://localhost:3310/api/items/${listId}`,
@@ -59,9 +53,7 @@ function ItemsPage() {
       }
 
       const newItemAdd = await response.json();
-      // console.log('Réponse API:', newItemAdd);
       setPrep((prepAddNewItem) => [...prepAddNewItem, newItemAdd.item]);
-      // setNewItem("");
       console.info("Item added successfully:", newItemAdd);
     } catch (error) {
       console.error("Error adding item:", error);
@@ -108,22 +100,17 @@ function ItemsPage() {
         throw new Error("Network response was not ok");
       }
       const newItemEdited = await response.json();
-      // console.log("Réponse API:", newItemEdited);
-      setPrep((prepEditNewItem) => [...prepEditNewItem, newItemEdited.item]);
       console.info("Item eddited successfully:", newItemEdited);
     } catch (error) {
       console.error("Error edditing item:", error);
     }
   };
 
-  const handleChangeCheckBox = (e, index) => {
-    // console.log(e.target.value);
+  // Pour permettre le edit, il faut cocher la case pour savoir quel champ on veut modifier et ainsi pouvoir changer un seul champs à la fois
+  const handleChangeCheckBox = (e, index, itemId) => {
     const activeItem = document.getElementById(index).checked;
-    // console.log("Item coché: ", activeItem);
     if (activeItem === true) {
-      setItemChecked((oldItems) => [...oldItems, e.target.value]);
-    } else {
-      setItemChecked(ItemChecked.filter((values) => values !== e.target.value));
+      setItemChecked(itemId);
     }
   };
 
@@ -137,25 +124,31 @@ function ItemsPage() {
             id={index}
             type="checkbox"
             value={item.todo}
-            onChange={(e) => handleChangeCheckBox(e, index)}
+            onChange={(e) => handleChangeCheckBox(e, index, item.id)}
           />
-          <input
-            className="edit_item"
-            type="text"
-            name="item"
-            placeholder={item.todo}
-            value={itemEdited}
-            onChange={handleInputChangeToEdit}
-          />
-          <button
-            type="button"
-            onClick={() => {
-              // Transmet l'id de l'item qu'on souhaite modifier à la fonction handleEditItem
-              handleEditItem(item.id);
-            }}
-          >
-            Modifier
-          </button>
+          {ItemChecked === item.id ? (
+            <>
+              <input
+                className="edit_item"
+                type="text"
+                name="item"
+                placeholder={item.todo}
+                value={itemEdited}
+                onChange={handleInputChangeToEdit}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  // Transmet l'id de l'item qu'on souhaite modifier à la fonction handleEditItem
+                  handleEditItem(item.id);
+                }}
+              >
+                Modifier
+              </button>
+            </>
+          ) : (
+            <p>{item.todo}</p>
+          )}
 
           <button
             type="button"
