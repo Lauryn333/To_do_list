@@ -2,6 +2,8 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/items_pages.css";
 
+// Pb a régler : lors du add d'un nouvel item on doit raffraichir la page pour voir l'effet produit --> faire en sorte qu'il n'y ai plus à raffraichir la page pour voir l'ajout d'un élémént
+
 function ItemsPage() {
   const items = useLoaderData();
 
@@ -10,6 +12,9 @@ function ItemsPage() {
   const [prep, setPrep] = useState([]);
 
   const [newItem, setNewItem] = useState("");
+  const [itemEdited, setItemEdited] = useState("");
+
+  const [ItemChecked, setItemChecked] = useState("");
 
   useEffect(() => {
     const itemsData = items.filter(
@@ -24,9 +29,11 @@ function ItemsPage() {
     setNewItem(event.target.value);
   };
 
-  const handleAddItem = async (event) => {
-    event.preventDefault();
+  const handleInputChangeToEdit = (event) => {
+    setItemEdited(event.target.value);
+  };
 
+  const handleAddItem = async () => {
     try {
       const response = await fetch(
         `http://localhost:3310/api/items/${listId}`,
@@ -46,22 +53,114 @@ function ItemsPage() {
       }
 
       const newItemAdd = await response.json();
-      setPrep((prepAddNewItem) => [...prepAddNewItem, newItemAdd]);
-      setNewItem("");
+      setPrep((prepAddNewItem) => [...prepAddNewItem, newItemAdd.item]);
       console.info("Item added successfully:", newItemAdd);
     } catch (error) {
       console.error("Error adding item:", error);
     }
   };
+
+  const handleDeleteItem = async (id) => {
+    // Reçoit l'id de l'item qu'on souhaite delete et on le transmet à l'URL
+    try {
+      const response = await fetch(`http://localhost:3310/api/items/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      // Pour delete automatiquement et que ça se voit directement sans avoir à raffraichir la page
+      setPrep((nouveauxItems) =>
+        nouveauxItems.filter((item) => item.id !== id)
+      );
+      console.info("Item successfully deleted");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleEditItem = async (id) => {
+    // Reçoit l'id de l'item qu'on souhaite edit et on le transmet à l'URL
+    try {
+      const response = await fetch(`http://localhost:3310/api/items/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          todo: itemEdited,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const newItemEdited = await response.json();
+      console.info("Item eddited successfully:", newItemEdited);
+    } catch (error) {
+      console.error("Error edditing item:", error);
+    }
+  };
+
+  // Pour permettre le edit, il faut cocher la case pour savoir quel champ on veut modifier et ainsi pouvoir changer un seul champs à la fois
+  const handleChangeCheckBox = (e, index, itemId) => {
+    const activeItem = document.getElementById(index).checked;
+    if (activeItem === true) {
+      setItemChecked(itemId);
+    }
+  };
+
   return (
     <>
-      {prep?.map((item) => (
-        <>
-          <p key={item?.id}>{item?.todo}</p>
-          <button type="button">Supprimer</button>
-        </>
-      ))}
+      {prep.map((item, index) => (
+        <div key={item.id} className="div-item">
+          <p>{item.id}</p>
 
+          <input
+            id={index}
+            type="checkbox"
+            value={item.todo}
+            onChange={(e) => handleChangeCheckBox(e, index, item.id)}
+          />
+          {ItemChecked === item.id ? (
+            <>
+              <input
+                className="edit_item"
+                type="text"
+                name="item"
+                placeholder={item.todo}
+                value={itemEdited}
+                onChange={handleInputChangeToEdit}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  // Transmet l'id de l'item qu'on souhaite modifier à la fonction handleEditItem
+                  handleEditItem(item.id);
+                }}
+              >
+                Modifier
+              </button>
+            </>
+          ) : (
+            <p>{item.todo}</p>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              // Transmet l'id de l'item qu'on souhaite delete à la fonction handleDeleteItem
+              handleDeleteItem(item.id);
+            }}
+          >
+            Supprimer
+          </button>
+        </div>
+      ))}
       <input
         className="add_item"
         type="text"
