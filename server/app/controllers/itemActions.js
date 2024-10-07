@@ -23,6 +23,18 @@ const read = async (req, res, next) => {
   }
 };
 
+const edit = async (req, res, next) => {
+  const { itemId } = req.params;
+  const item = req.body;
+
+  try {
+    const response = await tables.item.edit(item, itemId);
+    res.status(201).json({ response, item });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const add = async (req, res, next) => {
   const { listId } = req.params;
   const item = req.body;
@@ -52,7 +64,7 @@ const destroy = async (req, res, next) => {
 module.exports = {
   browse,
   read,
-  // edit,
+  edit,
   add,
   destroy,
 };
