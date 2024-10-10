@@ -15,20 +15,40 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  width: 80%;
+  margin-bottom: 10%;
 }
 
 .list_individuelle {
   margin: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 0.5px black solid;
+  border-radius: 12px;
+  background-color: #f8eeed;
 }
 
 .header-hp > h1 {
   color: black;
-  font-size: 5rem;
+  font-size: 2rem;
+  font-weight: lighter;
+  margin-top: 0;
 }
 
 .list_individuelle > h2 {
-  color: black;
+  color: #6a0907;
+  font-weight: lighter;
 }
 a {
   text-decoration: none;
+}
+
+.img-logo {
+  width: 60vw;
+  height: 40vh;
+}
+
+.logo-gitHub {
+  width: 15%;
+  height: 10%;
 }
