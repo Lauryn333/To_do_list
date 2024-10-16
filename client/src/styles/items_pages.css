@@ -2,6 +2,60 @@ p {
   color: black;
 }
 
+.first-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.first-section > h1 {
+  color: black;
+  font-size: 3rem;
+  font-weight: lighter;
+}
+
+.fleche-retour {
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.add-item {
+  border-radius: 1.5rem;
+  width: 70%;
+  background-color: #d9ad2b;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.barre-de-separation {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.second-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .div-item {
   display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+.checkbox-and-item {
+  display: flex;
+  border: 1px solid #6a0907;
+  border-radius: 1.2rem;
+  width: 70vw;
+  margin-right: 5%;
+}
+.img-bin {
+  width: 10%;
+  height: 10%;
 }

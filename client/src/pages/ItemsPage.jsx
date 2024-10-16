@@ -1,6 +1,10 @@
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/items_pages.css";
+import flecheRetour from "../assets/images/fleche-retour.png";
+import addList from "../assets/images/add-list.png";
+import bin from "../assets/images/bin.png";
+import barre from "../assets/images/barre.png";
 
 // Pb a régler : lors du add d'un nouvel item on doit raffraichir la page pour voir l'effet produit --> faire en sorte qu'il n'y ai plus à raffraichir la page pour voir l'ajout d'un élémént
 
@@ -116,62 +120,83 @@ function ItemsPage() {
 
   return (
     <>
-      {prep.map((item, index) => (
-        <div key={item.id} className="div-item">
-          <p>{item.id}</p>
-
+      <Link to="/">
+        <img
+          className="fleche-retour"
+          src={flecheRetour}
+          alt="Bouton de retour à la page d'accueil"
+        />
+      </Link>
+      <section className="first-section">
+        <h1>Titre de la liste</h1>
+        <div className="add-bar">
           <input
-            id={index}
-            type="checkbox"
-            value={item.todo}
-            onChange={(e) => handleChangeCheckBox(e, index, item.id)}
+            className="add-item"
+            type="text"
+            name="item"
+            placeholder="Ajoute une tâche"
+            value={newItem}
+            onChange={handleInputChange}
           />
-          {ItemChecked === item.id ? (
-            <>
-              <input
-                className="edit_item"
-                type="text"
-                name="item"
-                placeholder={item.todo}
-                value={itemEdited}
-                onChange={handleInputChangeToEdit}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  // Transmet l'id de l'item qu'on souhaite modifier à la fonction handleEditItem
-                  handleEditItem(item.id);
-                }}
-              >
-                Modifier
-              </button>
-            </>
-          ) : (
-            <p>{item.todo}</p>
-          )}
-
-          <button
-            type="button"
-            onClick={() => {
-              // Transmet l'id de l'item qu'on souhaite delete à la fonction handleDeleteItem
-              handleDeleteItem(item.id);
-            }}
-          >
-            Supprimer
-          </button>
+          {/* eslint-disable jsx-a11y/click-events-have-key-events,
+          jsx-a11y/no-noninteractive-element-interactions */}
+          <img src={addList} alt="Ajouter une tâche" onClick={handleAddItem} />
         </div>
-      ))}
-      <input
-        className="add_item"
-        type="text"
-        name="item"
-        placeholder="Ajoute une tâche"
-        value={newItem}
-        onChange={handleInputChange}
-      />
-      <button type="button" onClick={handleAddItem}>
-        Créer
-      </button>
+        <img
+          className="barre-de-separation"
+          src={barre}
+          alt="barre de séparation"
+        />
+      </section>
+      <section className="second-section">
+        {prep.map((item, index) => (
+          <div key={item.id} className="div-item">
+            <p>{item.id}</p>
+
+            <div className="checkbox-and-item">
+              <input
+                id={index}
+                type="checkbox"
+                value={item.todo}
+                onChange={(e) => handleChangeCheckBox(e, index, item.id)}
+              />
+              {ItemChecked === item.id ? (
+                <>
+                  <input
+                    className="edit_item"
+                    type="text"
+                    name="item"
+                    placeholder={item.todo}
+                    value={itemEdited}
+                    onChange={handleInputChangeToEdit}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Transmet l'id de l'item qu'on souhaite modifier à la fonction handleEditItem
+                      handleEditItem(item.id);
+                    }}
+                  >
+                    Modifier
+                  </button>
+                </>
+              ) : (
+                <p>{item.todo}</p>
+              )}
+            </div>
+            <img
+              className="img-bin"
+              src={bin}
+              alt="Bouton pour supprimer une tâche"
+              onClick={() => {
+                // Transmet l'id de l'item qu'on souhaite delete à la fonction handleDeleteItem
+                handleDeleteItem(item.id);
+              }}
+            />
+          </div>
+        ))}
+      </section>
     </>
   );
 }
